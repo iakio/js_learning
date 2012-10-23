@@ -78,3 +78,47 @@ test("==と===", function () {
     ok("" !== 0);
 });
 
+
+test("blockはスコープを持たず、関数だけがスコープを持つ" , function () {
+    var a = 1;
+
+    if (true) {
+        var a = 2;
+
+        (function () {
+            var a = 3;
+            equal(3, a);
+        }());
+    }
+    equal(2, a);
+});
+
+test("&&演算子でプロパティにアクセス可能かをチェック", function () {
+    var o;
+    var name = o && o.getName();
+    equal(undefined, name);
+    o = {};
+    o.getName = function() { return "getName!!!"; };
+    name = o && o.getName();
+    equal("getName!!!", name);
+});
+
+test("||演算子でデフォルト値を設定", function () {
+    var otherName;
+    var name = otherName || "default";
+
+    equal("default", name);
+
+    otherName = "myName";
+    name = otherName || "default";
+    equal("myName", name);
+});
+
+
+test("オブジェクトのプロパティへのアクセス方法", function () {
+    var o = {name: "Simon"};
+    var key = "name";
+    equal("Simon", o.name);
+    equal("Simon", o["name"]);
+    equal("Simon", o[key]);
+});
