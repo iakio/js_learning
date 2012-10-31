@@ -122,3 +122,69 @@ test("オブジェクトのプロパティへのアクセス方法", function ()
     equal("Simon", o["name"]);
     equal("Simon", o[key]);
 });
+
+
+test("lengthは最後の要素+1", function () {
+    var a = [ "dog", "cat", "hen" ];
+    a[100] = "fox";
+
+    equal(100 + 1, a.length);
+    equal(undefined, a[3]);
+});
+
+
+test("配列をコピーする方法", function () {
+    var a = [ 1, 2, 3 ],
+        b = a,
+        c = a.slice(),
+        d = a.concat();
+    a[0] = 100;
+    equal(100, a[0]);
+    equal(100, b[0]);
+    equal(  1, c[0]);
+    equal(  1, d[0]);
+});
+
+
+test("配列を空にする方法", function () {
+    var a = [ 1, 2, 3 ],
+        b = [ 1, 2, 3 ];
+
+    a.length = 0;
+    equal(0, a.length);
+
+    b.splice(0, b.length);
+    equal(0, b.length);
+});
+
+
+test("引数が渡されなかった場合はundefinedになる", function () {
+    function add(x, y) {
+        equal(undefined, x);
+    }
+    add();
+});
+
+
+test("applyで配列を引数として渡す", function () {
+    function add(x, y) {
+        return x + y;
+    }
+    equal(5, add.apply(null, [2, 3]));
+});
+
+
+test("名前付き無名関数の有効範囲", function () {
+    var v1 = (function f() {
+        equal("function", typeof f);
+        return 1;
+    }());
+    var v2 = (function f() {
+        //debugger;
+        equal("function", typeof f);
+        return 2;
+    }());
+    equal(1, v1);
+    equal(2, v2);
+    equal("undefined", typeof f);
+});
